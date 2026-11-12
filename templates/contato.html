@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Contato & Feedback | Ajuda Amiga</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="/boas_vindas" class="logo-link">
+            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo Ajuda Amiga" class="logo-img">
+        </a>
+        <div class="nav-links">
+            <a href="/quiz">Questionário</a>
+            <a href="/loja">Loja</a>
+            <a href="/sair">Sair</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="auth-grid">
+
+            <div class="card">
+                <span class="tag-match">Atendimento Personalizado</span>
+                <h2>Fale Conosco</h2>
+                <p class="subtitulo">Ficou com alguma dúvida sobre sua cartela de cores ou sobre as peças da loja? Entre em contato diretamente com nossa consultora!</p>
+
+                <div style="background: #FAF7F5; padding: 20px; border-radius: 12px; border: 1px solid #C89D54; margin-top: 20px;">
+                    <p style="margin-bottom: 8px;"><strong>Consultora Responsável:</strong> Ana Clara</p>
+                    <p style="margin-bottom: 16px;"><strong>WhatsApp / Telefone:</strong> (18) 99130-0304</p>
+                    <a href="https://wa.me/5518991300304?text=Oi%20Ana%20Clara!%20Gostaria%20de%20tirar%20uma%20d%C3%BAvida%20sobre%20o%20Ajuda%20Amiga." target="_blank" class="btn btn-dourado btn-full" style="margin-top: 0;">
+                        Chamar Ana Clara no WhatsApp
+                    </a>
+                </div>
+            </div>
+
+
+            <div class="card">
+                <span class="tag-match">Sua Opinião</span>
+                <h2>Deixe seu Feedback</h2>
+                <p class="subtitulo">Conte para nós o que achou da experiência no site Ajuda Amiga.</p>
+
+                <form action="/enviar_feedback" method="POST">
+                    <label>Como você avalia o site?</label>
+                    <select name="nota" required>
+                        <option value="Excelente">⭐⭐⭐⭐⭐ — Excelente, amei!</option>
+                        <option value="Muito Bom">⭐⭐⭐⭐ — Muito bom</option>
+                        <option value="Bom">⭐⭐⭐ — Bom</option>
+                        <option value="Pode Melhorar">⭐⭐ — Pode melhorar</option>
+                    </select>
+
+                    <label>Sua mensagem ou sugestão</label>
+                    <textarea name="mensagem" rows="4" placeholder="Escreva aqui o que achou do questionário, das cores e das roupas..." required></textarea>
+
+                    <button type="submit" class="btn btn-full">Enviar Feedback</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <a href="https://wa.me/5518991300304?text=Oi%20Ana%20Clara!%20Vim%20pelo%20site%20Ajuda%20Amiga." target="_blank" class="whatsapp-float" title="Falar com Ana Clara no WhatsApp">
+        <svg viewBox="0 0 32 32"><path d="M16 2.93c-7.21 0-13.07 5.86-13.07 13.07 0 2.3.6 4.55 1.74 6.53L2.8 29.2l6.85-1.8c1.91 1.04 4.07 1.59 6.35 1.59 7.21 0 13.07-5.86 13.07-13.07S23.21 2.93 16 2.93zm7.62 18.43c-.32.9-1.87 1.72-2.58 1.83-.66.1-1.5.14-2.42-.15-.56-.18-1.28-.42-2.2-.82-3.87-1.67-6.4-5.57-6.59-5.83-.19-.26-1.57-2.09-1.57-3.99s.99-2.83 1.34-3.22c.35-.39.77-.49 1.03-.49.26 0 .51 0 .74.01.24.01.56-.09.87.66.32.77 1.09 2.66 1.19 2.85.1.19.16.42.03.68-.13.26-.19.42-.39.64-.19.23-.41.51-.58.68-.19.19-.39.4-.17.78.23.39 1.01 1.66 2.16 2.69 1.49 1.32 2.74 1.73 3.13 1.93.39.19.61.16.84-.1.23-.26.97-1.13 1.23-1.52.26-.39.51-.32.87-.19.35.13 2.25 1.06 2.64 1.25.39.19.64.29.74.45.1.16.1.93-.22 1.83z"/></svg>
+    </a>
+
+</body>
+</html>

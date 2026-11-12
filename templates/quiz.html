@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Consultoria Interativa | Ajuda Amiga</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+
+        .progresso-container {
+            width: 100%;
+            height: 10px;
+            background: #EFE4EC;
+            border-radius: 10px;
+            margin: 15px 0 28px 0;
+            overflow: hidden;
+        }
+        .progresso-barra {
+            height: 100%;
+            width: 25%;
+            background: linear-gradient(90deg, #5E2B68, #C89D54);
+            border-radius: 10px;
+            transition: width 0.35s ease;
+        }
+        .etapa-quiz {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        .etapa-quiz.ativa {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .cards-interativos {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-top: 18px;
+        }
+        .card-escolha {
+            border: 2px solid #EFE4EC;
+            background: #FAF7F5;
+            border-radius: 14px;
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.2s;
+            position: relative;
+        }
+        .card-escolha:hover {
+            border-color: #C89D54;
+            transform: translateY(-2px);
+        }
+        .card-escolha input[type="radio"] {
+            display: none;
+        }
+        .card-escolha.selecionado {
+            border-color: #5E2B68;
+            background: #F3D4EB;
+            box-shadow: 0 6px 16px rgba(94, 43, 104, 0.14);
+        }
+        .bolinha-grande {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            border: 2px solid #C89D54;
+            flex-shrink: 0;
+        }
+        .emoji-box {
+            font-size: 1.8rem;
+            width: 42px;
+            text-align: center;
+        }
+        .navegacao-quiz {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #EFE4EC;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="/boas_vindas" class="logo-link">
+            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo Ajuda Amiga" class="logo-img">
+        </a>
+        <div class="nav-links">
+            <a href="/contato">Contato & Feedback</a>
+            <a href="/sair">Sair</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="card" style="max-width: 760px; margin: 0 auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span class="tag-match" id="texto-etapa">Etapa 1 de 4</span>
+                <span style="color: #6D597A; font-size: 0.9rem;">Consultoria de Estilo</span>
+            </div>
+
+
+            <div class="progresso-container">
+                <div class="progresso-barra" id="barra-progresso"></div>
+            </div>
+
+            <form action="/salvar_perfil" method="POST" id="form-quiz">
+
+                <div class="etapa-quiz ativa" id="etapa-1">
+                    <h2>Qual tom mais se aproxima da sua pele?</h2>
+                    <p class="subtitulo">Isso nos ajuda a encontrar o subtom ideal para iluminar seu rosto.</p>
+
+                    <div class="cards-interativos">
+                        <label class="card-escolha" onclick="selecionarCard(this, 'tom_pele')">
+                            <input type="radio" name="tom_pele" value="Clara Rosada" required>
+                            <span class="bolinha-grande" style="background: #F7D6D0;"></span>
+                            <div>
+                                <strong>Clara Rosada</strong>
+                                <div style="font-size: 0.85rem; color: #6D597A;">Fundo levemente frio/rosado</div>
+                            </div>
+                        </label>
+
+                        <label class="card-escolha" onclick="selecionarCard(this, 'tom_pele')">
+                            <input type="radio" name="tom_pele" value="Clara Dourada">
+                            <span class="bolinha-grande" style="background: #F3CFA4;"></span>
+                            <div>
+                                <strong>Clara Dourada</strong>
+                                <div style="font-size: 0.85rem; color: #6D597A;">Fundo quente/pêssego</div>
+                            </div>
+                        </label>
+
+                        <label class="card-escolha" onclick="selecionarCard(this, 'tom_pele')">
+                            <input type="radio" name="tom_pele" value="Média / Oliva">
+                            <span class="bolinha-grande" style="background: #C69068;"></span>
+                            <div>
+                                <strong>Média / Oliva</strong>
+                                <div style="font-size: 0.85rem; color: #6D597A;">Bronzeado natural equilibrado</div>
+                            </div>
+                        </label>
+
+                        <label class="card-escolha" onclick="selecionarCard(this, 'tom_pele')">
+                            <input type="radio" name="tom_pele" value="Negra / Retinta">
+                            <span class="bolinha-grande" style="background: #5C3824;"></span>
+                            <div>
+                                <strong>Negra / Retinta</strong>
+                                <div style="font-size: 0.85rem; color: #6D597A;">Pele profunda e luminosa</div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="navegacao-quiz" style="justify-content: flex-end;">
+                        <button type="button" class="btn" onclick="mudarEtapa(2, 'tom_pele')">Próxima Etapa &rarr;</button>
+                    </div>
+                </div>
+
+
+                <div class="etapa-quiz" id="etapa-2">
+                    <h2>Qual é a cor natural (ou atual) do seu cabelo?</h2>
+                    <p class="subtitulo">O cabelo funciona como a moldura principal do seu rosto.</p>
+
+                    <div class="cards-interativos">
+                        <label class="card-escolha" onclick="selecionarCard(this, 'cor_cabelo')">
+                            <input type="radio" name="cor_cabelo" value="Loiro / Castanho Claro" required>
+                            <span class="bolinha-grande" style="background: #D9B36C;"></span>
+                            <div>
+                                <strong>Loiro / Castanho Claro</strong>
+                                <div style="font-size: 0.85rem; color: #6D597A;">Fios claros ou iluminados</div>
+                            </div>
+                        </label>
+
+                        <label class="card-escolha" onclick="selecionarCard(this, 'cor_cabelo')">
+                            <input type="radio" name="cor_cabelo" value="Castanho Médio">
+                            <span class="bolinha-grande" style="background: #6B4423;"></span>
+                            <div>
+                                <strong>Castanho Médio</strong>
+                                <div style="font-size: 0.85rem; color: #6D597A;">Tom chocolate ou avelã</div>
+                            </div>
+                        </label>
+
+                        <label class="card-escolha" onclick="selecionarCard(this, 'cor_cabelo')">
+                            <input type="radio" name="cor_cabelo" value="Preto / Castanho Escuro">
+                            <span class="bolinha-grande" style="background: #1C1917;"></span>
+                            <div>
+                                <strong>Preto / Escuro</strong>
+                                <div style="font-size: 0.85rem; color: #6D597A;">Fios intensos e profundos</div>
+                            </div>
+                        </label>
+
+                        <label class="card-escolha" onclick="selecionarCard(this, 'cor_cabelo')">
+                            <input type="radio" name="cor_cabelo" value="Ruivo / Acobreado">
+                            <span class="bolinha-grande" style="background: #9E3B24;"></span>
+                            <div>
+                                <strong>Ruivo / Acobreado</strong>
+                                <div style="font-size: 0.85rem; color: #6D597A;">Tons quentes avermelhados</div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="navegacao-quiz">
+                        <button type="button" class="btn btn-rosa" onclick="voltarEtapa(1)">&larr; Voltar</button>
+                        <button type="button" class="btn" onclick="mudarEtapa(3, 'cor_cabelo')">Próxima Etapa &rarr;</button>
+                    </div>
+                </div>
+
+
+                <div class="etapa-quiz" id="etapa-3">
+                    <h2>Como é o contraste entre sua pele, olhos e cabelo?</h2>
+                    <p class="subtitulo">Pense na diferença de cor entre sua pele e seus fios/sobrancelhas.</p>
+
+                    <div class="cards-interativos" style="grid-template-columns: 1fr;">
+                        <label class="card-escolha" onclick="selecionarCard(this, 'contraste')">
+                            <input type="radio" name="contraste" value="Baixo Contraste (Suave)" required>
+                            <div class="emoji-box">🌸</div>
+                            <div>
+                                <strong>Baixo Contraste (Suave)</strong>
+                                <div style="font-size: 0.85rem; color: #6D597A;">Pele, cabelo e olhos têm tons bem próximos e delicados.</div>
+                            </div>
+                        </label>
+
+                        <label class="card-escolha" onclick="selecionarCard(this, 'contraste')">
+                            <input type="radio" name="contraste" value="Médio Contraste">
+                            <div class="emoji-box">✨</div>
+                            <div>
+                                <strong>Médio Contraste (Equilibrado)</strong>
+                                <div style="font-size: 0.85rem; color: #6D597A;">Há uma diferença moderada e harmoniosa entre os tons.</div>
+                            </div>
+                        </label>
+
+                        <label class="card-escolha" onclick="selecionarCard(this, 'contraste')">
+                            <input type="radio" name="contraste" value="Alto Contraste">
+                            <div class="emoji-box">💫</div>
+                            <div>
+                                <strong>Alto Contraste (Marcante)</strong>
+                                <div style="font-size: 0.85rem; color: #6D597A;">Muita diferença entre o tom da pele e a cor do cabelo/olhos.</div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="navegacao-quiz">
+                        <button type="button" class="btn btn-rosa" onclick="voltarEtapa(2)">&larr; Voltar</button>
+                        <button type="button" class="btn" onclick="mudarEtapa(4, 'contraste')">Próxima Etapa &rarr;</button>
+                    </div>
+                </div>
+
+
+                <div class="etapa-quiz" id="etapa-4">
+                    <h2>Qual vibe mais combina com os seus looks?</h2>
+                    <p class="subtitulo">Último passo! Escolha o estilo que você mais ama usar.</p>
+
+                    <div class="cards-interativos">
+                        <label class="card-escolha" onclick="selecionarCard(this, 'estilo_preferido')">
+                            <input type="radio" name="estilo_preferido" value="Romântico & Aesthetic" required>
+                            <div class="emoji-box">🌷</div>
+                            <div>
+                                <strong>Romântico & Aesthetic</strong>
+                                <div style="font-size: 0.85rem; color: #6D597A;">Vestidos fluidos, babados e delicadeza</div>
+                            </div>
+                        </label>
+
+                        <label class="card-escolha" onclick="selecionarCard(this, 'estilo_preferido')">
+                            <input type="radio" name="estilo_preferido" value="Moderno">
+                            <div class="emoji-box">🦋</div>
+                            <div>
+                                <strong>Trendy & Moderno</strong>
+                                <div style="font-size: 0.85rem; color: #6D597A;">Wide leg, croppeds e peças atuais</div>
+                            </div>
+                        </label>
+
+                        <label class="card-escolha" onclick="selecionarCard(this, 'estilo_preferido')">
+                            <input type="radio" name="estilo_preferido" value="Clean Girl">
+                            <div class="emoji-box">🤍</div>
+                            <div>
+                                <strong>Clean Girl / Minimalista</strong>
+                                <div style="font-size: 0.85rem; color: #6D597A;">Cortes retos, conjuntos e elegância</div>
+                            </div>
+                        </label>
+
+                        <label class="card-escolha" onclick="selecionarCard(this, 'estilo_preferido')">
+                            <input type="radio" name="estilo_preferido" value="Casual Street">
+                            <div class="emoji-box">👟</div>
+                            <div>
+                                <strong>Casual Street</strong>
+                                <div style="font-size: 0.85rem; color: #6D597A;">Conforto, moletom e estilo urbano</div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="navegacao-quiz">
+                        <button type="button" class="btn btn-rosa" onclick="voltarEtapa(3)">&larr; Voltar</button>
+                        <button type="submit" class="btn btn-dourado">Revelar Minha Cartela &rarr;</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+
+    <a href="https://wa.me/5518991300304?text=Oi%20Ana%20Clara!%20Vim%20pelo%20site%20Ajuda%20Amiga." target="_blank" class="whatsapp-float" title="Falar com Ana Clara no WhatsApp">
+        <svg viewBox="0 0 32 32"><path d="M16 2.93c-7.21 0-13.07 5.86-13.07 13.07 0 2.3.6 4.55 1.74 6.53L2.8 29.2l6.85-1.8c1.91 1.04 4.07 1.59 6.35 1.59 7.21 0 13.07-5.86 13.07-13.07S23.21 2.93 16 2.93zm7.62 18.43c-.32.9-1.87 1.72-2.58 1.83-.66.1-1.5.14-2.42-.15-.56-.18-1.28-.42-2.2-.82-3.87-1.67-6.4-5.57-6.59-5.83-.19-.26-1.57-2.09-1.57-3.99s.99-2.83 1.34-3.22c.35-.39.77-.49 1.03-.49.26 0 .51 0 .74.01.24.01.56-.09.87.66.32.77 1.09 2.66 1.19 2.85.1.19.16.42.03.68-.13.26-.19.42-.39.64-.19.23-.41.51-.58.68-.19.19-.39.4-.17.78.23.39 1.01 1.66 2.16 2.69 1.49 1.32 2.74 1.73 3.13 1.93.39.19.61.16.84-.1.23-.26.97-1.13 1.23-1.52.26-.39.51-.32.87-.19.35.13 2.25 1.06 2.64 1.25.39.19.64.29.74.45.1.16.1.93-.22 1.83z"/></svg>
+    </a>
+
+    <script>
+        function selecionarCard(elemento, nomeGrupo) {
+
+            const todos = document.querySelectorAll('input[name="' + nomeGrupo + '"]');
+            todos.forEach(input => {
+                input.parentElement.classList.remove('selecionado');
+            });
+
+            elemento.classList.add('selecionado');
+        }
+
+        function mudarEtapa(proxima, nomeCampoAtual) {
+
+            const selecionado = document.querySelector('input[name="' + nomeCampoAtual + '"]:checked');
+            if (!selecionado) {
+                alert("Por favor, selecione uma opção antes de continuar!");
+                return;
+            }
+            mostrarEtapa(proxima);
+        }
+
+        function voltarEtapa(anterior) {
+            mostrarEtapa(anterior);
+        }
+
+        function mostrarEtapa(numero) {
+            document.querySelectorAll('.etapa-quiz').forEach(div => div.classList.remove('ativa'));
+            document.getElementById('etapa-' + numero).classList.add('ativa');
+
+            document.getElementById('texto-etapa').innerText = 'Etapa ' + numero + ' de 4';
+            document.getElementById('barra-progresso').style.width = (numero * 25) + '%';
+        }
+    </script>
+
+</body>
+</html>

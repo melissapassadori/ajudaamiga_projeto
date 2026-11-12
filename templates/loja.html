@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Loja Recomendada | Ajuda Amiga</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .menu-categorias {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+        }
+        .aba-cat {
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.92rem;
+            background: #FFFFFF;
+            color: #5E2B68;
+            border: 2px solid #EFE4EC;
+            transition: all 0.2s;
+        }
+        .aba-cat:hover {
+            border-color: #C89D54;
+            background: #F3D4EB;
+        }
+        .aba-cat.ativa {
+            background: #5E2B68;
+            color: #FFFFFF;
+            border-color: #5E2B68;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="/boas_vindas" class="logo-link">
+            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo Ajuda Amiga" class="logo-img">
+        </a>
+        <div class="nav-links">
+            <a href="/resultado">Minha Cartela</a>
+            <a href="/quiz">Refazer Quiz</a>
+            <a href="/contato">Contato & Feedback</a>
+            <a href="/carrinho">Carrinho <span class="badge-carrinho">{{ qtd_carrinho }}</span></a>
+            <a href="/sair">Sair</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Banner mostrando o perfil da usuária -->
+        <div class="banner-perfil">
+            <div>
+                <h2>Vitrine Curada para {{ nome }}</h2>
+                <p>Cartela ativa: <span>{{ perfil.cartela_resultado if perfil else 'Tons Pastel' }}</span> • Vibe: <span>{{ perfil.estilo_preferido if perfil else 'Jovem' }}</span></p>
+            </div>
+            <a href="/carrinho" class="btn btn-dourado" style="margin-top: 0;">Ver Carrinho ({{ qtd_carrinho }})</a>
+        </div>
+
+        <!-- Abas / Páginas Separadas por Tipo de Roupa -->
+        <div class="menu-categorias">
+            <a href="/loja?categoria=Todas" class="aba-cat {{ 'ativa' if categoria_atual == 'Todas' else '' }}">✨ Todas as Peças</a>
+            <a href="/loja?categoria=Blusas" class="aba-cat {{ 'ativa' if categoria_atual == 'Blusas' else '' }}">👚 Blusas & Croppeds</a>
+            <a href="/loja?categoria=Calças" class="aba-cat {{ 'ativa' if categoria_atual == 'Calças' else '' }}">👖 Calças & Saias</a>
+            <a href="/loja?categoria=Vestidos" class="aba-cat {{ 'ativa' if categoria_atual == 'Vestidos' else '' }}">👗 Vestidos</a>
+            <a href="/loja?categoria=Casacos" class="aba-cat {{ 'ativa' if categoria_atual == 'Casacos' else '' }}">🧥 Casacos & Conjuntos</a>
+        </div>
+
+        <!-- Grade de Produtos -->
+        <div class="produtos-grid">
+            {% for p in produtos %}
+            <div class="produto-card">
+                <a href="/produto/{{ p.id_produto }}" style="text-decoration: none; color: inherit;">
+                    <img src="{{ p.imagem_url }}" alt="{{ p.nome }}">
+                </a>
+                <div class="produto-info">
+                    <span class="tag-match">{{ p.tag_match }}</span>
+                    <a href="/produto/{{ p.id_produto }}" style="text-decoration: none; color: inherit;">
+                        <h3>{{ p.nome }}</h3>
+                    </a>
+                    <p style="color: #6D597A; font-size: 0.9rem;">{{ p.descricao }}</p>
+                    <div class="preco">R$ {{ "%.2f"|format(p.preco) }}</div>
+                    <a href="/produto/{{ p.id_produto }}" class="btn btn-rosa btn-full" style="margin-bottom: 8px; text-align: center;">Ver Detalhes</a>
+                    <a href="/adicionar_carrinho/{{ p.id_produto }}" class="btn btn-full">Adicionar ao Carrinho</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Bolinha WhatsApp -->
+    <a href="https://wa.me/5518991300304?text=Oi%20Ana%20Clara!%20Vim%20pelo%20site%20Ajuda%20Amiga." target="_blank" class="whatsapp-float" title="Falar com Ana Clara no WhatsApp">
+        <svg viewBox="0 0 32 32"><path d="M16 2.93c-7.21 0-13.07 5.86-13.07 13.07 0 2.3.6 4.55 1.74 6.53L2.8 29.2l6.85-1.8c1.91 1.04 4.07 1.59 6.35 1.59 7.21 0 13.07-5.86 13.07-13.07S23.21 2.93 16 2.93zm7.62 18.43c-.32.9-1.87 1.72-2.58 1.83-.66.1-1.5.14-2.42-.15-.56-.18-1.28-.42-2.2-.82-3.87-1.67-6.4-5.57-6.59-5.83-.19-.26-1.57-2.09-1.57-3.99s.99-2.83 1.34-3.22c.35-.39.77-.49 1.03-.49.26 0 .51 0 .74.01.24.01.56-.09.87.66.32.77 1.09 2.66 1.19 2.85.1.19.16.42.03.68-.13.26-.19.42-.39.64-.19.23-.41.51-.58.68-.19.19-.39.4-.17.78.23.39 1.01 1.66 2.16 2.69 1.49 1.32 2.74 1.73 3.13 1.93.39.19.61.16.84-.1.23-.26.97-1.13 1.23-1.52.26-.39.51-.32.87-.19.35.13 2.25 1.06 2.64 1.25.39.19.64.29.74.45.1.16.1.93-.22 1.83z"/></svg>
+    </a>
+
+</body>
+</html>
